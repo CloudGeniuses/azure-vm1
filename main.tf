@@ -3,9 +3,9 @@
 ############################################
 terraform {
   cloud {
-    organization = "cloudgenius"   # <-- change to your TFC org
+    organization = "cloudgenius"   # <-- your TFC org
     workspaces {
-      name = "azure-vm1"           # <-- change to your TFC workspace
+      name = "azure-vm1"           # <-- your TFC workspace
     }
   }
 
@@ -28,14 +28,6 @@ terraform {
 ############################################
 provider "azurerm" {
   features {}
-  # Optional: default tags for everything
-  default_tags {
-    tags = {
-      managed-by  = "terraform"
-      cost-center = "cloudgenius"
-      data-class  = "standard"
-    }
-  }
 }
 
 ############################################
@@ -108,7 +100,7 @@ variable "create_public_ip" {
 }
 
 variable "extra_tags" {
-  description = "Extra tags merged with provider defaults."
+  description = "Extra tags applied to resources."
   type        = map(string)
   default = {
     environment = "lab"
@@ -128,7 +120,7 @@ locals {
   pip_name    = "pip-${var.name_prefix}"
   nic_name    = "${var.vm_name}-nic"
   os_disk     = "${var.vm_name}_OsDisk"
-  enable_rdp  = length(trim(var.allow_rdp_cidr)) > 0
+  enable_rdp  = length(trimspace(var.allow_rdp_cidr)) > 0
 }
 
 ############################################
